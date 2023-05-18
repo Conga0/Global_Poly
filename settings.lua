@@ -163,11 +163,14 @@ if GameIsBetaBuild() then
                     ui_name = "",
                     ui_fn = function(mod_id, gui, in_main_menu, im_id, setting)
                         if not in_main_menu then
+                            GuiIdPushString(gui, "global_poly_menu")
                             dofile_once("mods/global_poly/files/scripts/poly_pool.lua")
                             GuiLayoutBeginHorizontal(gui, 0, 0, false, 6, 6)
                             local count = 0
-                            for _, enemy in ipairs(poly_control_options) do
-                                if enemy.name:upper():match((ModSettingGetNextValue("global_poly.polyquery") or ""):upper()) then
+                            for i=1, #poly_control_options do
+                                local enemy = poly_control_options[i]
+                                if enemy.name:upper():match(tostring(ModSettingGetNextValue("global_poly.polyquery") or ""):upper()) then
+                                    local setting_id = "global_poly.poly_toggle_" .. enemy.file
                                     if count % 14 == 0 then
                                         GuiLayoutEnd(gui)
                                         GuiLayoutBeginHorizontal(gui, 0, 0, false, 6, 6)
@@ -176,19 +179,17 @@ if GameIsBetaBuild() then
                                     GuiOptionsAddForNextWidget(gui, 8)
                                     GuiOptionsAddForNextWidget(gui, 6)
                                     local path = "data/ui_gfx/animal_icons/"
-                                    if ModSettingGetNextValue(("global_poly.poly_toggle_" .. enemy.file) or false) == false then
-                                        GuiOptionsAddForNextWidget(gui, 26) end
-                                    local lmb, rmb = GuiImageButton(gui, im_id + #poly_control_options + count, 0, 0, "",
-                                        table.concat({ path, (enemy.uniquegfx or enemy.file), ".png" }))
+                                    if ModSettingGetNextValue(setting_id or false) == false then GuiOptionsAddForNextWidget(gui, 26) end
+                                    local lmb, rmb = GuiImageButton(gui, i, 0, 0, "", table.concat({ path, (enemy.uniquegfx or enemy.file), ".png" }))
                                     GuiTooltip(gui, enemy.name, "")
                                     if lmb then
-                                        ModSettingSetNextValue("global_poly.poly_toggle_" .. enemy.file, true, false)
+                                        ModSettingSetNextValue(setting_id, true, false)
                                         --PolymorphTableAddEntity((enemy.uniquepath or monsterpath) .. enemy.file .. ".xml", false, true)
                                         EditPolyTable(true, enemy.file, enemy.uniquepath or false)
                                         --GamePrint("enabled " .. enemy.name)
                                     end
                                     if rmb then
-                                        ModSettingSetNextValue("global_poly.poly_toggle_" .. enemy.file, false, false)
+                                        ModSettingSetNextValue(setting_id, false, false)
                                         --PolymorphTableRemoveEntity((enemy.uniquepath or monsterpath) .. enemy.file .. ".xml", true, true)
                                         EditPolyTable(false, enemy.file, enemy.uniquepath or false)
                                         --GamePrint("disabled " .. enemy.name)
@@ -197,6 +198,7 @@ if GameIsBetaBuild() then
                                 end
                             end
                             GuiLayoutEnd(gui)
+                            GuiIdPop(gui)
                         else
                             GuiLayoutBeginHorizontal(gui, 0, 0, false, 5, 5)
                             GuiImage(gui, im_id, 0, 0, "data/ui_gfx/inventory/icon_warning.png", 1, 1, 1)
