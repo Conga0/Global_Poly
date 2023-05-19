@@ -652,7 +652,7 @@ poly_control_options = {
     {
         file="fish_giga",
         name="Creature of the Deep (Leviathan)",
-        uniquepath="data/entities/animals/boss_robot/boss_fish/",
+        uniquepath="data/entities/animals/boss_fish/",
     },
     {
         file="maggot_tiny",
@@ -864,5 +864,9 @@ vanilla_poly_pool = {
     "spitmonster",
     "chest_mimic",
     "necromancer_shop",
-    "necromancer_super"
+    "necromancer_super",
+    "drone",
+    "slimeshooter_nontoxic",
+    "fireskull_weak",
+    "fungus_tiny",
 }
