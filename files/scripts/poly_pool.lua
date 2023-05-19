@@ -1,3 +1,4 @@
+---@diagnostic disable-next-line: lowercase-global
 poly_control_options = {
     {
         file="player",
@@ -735,6 +736,7 @@ poly_control_options = {
 --[Conga]
 
 --Polymorph settings from vanilla game
+---@diagnostic disable-next-line: lowercase-global
 vanilla_poly_pool = {
     "sheep_bat",
     "sheep_fly",
