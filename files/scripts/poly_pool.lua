@@ -727,6 +727,12 @@ poly_control_options = {
         name="Tiny Fungus",
         uniquegfx="poly_control/fungus_tiny",
     },
+    {
+        file="temple_statue",
+        name="Temple Statue",
+        uniquepath="data/entities/animals/poly_control_filler/",
+        uniquegfx="poly_control/temple_statue",
+    },
 }
 
 --Note for other modders

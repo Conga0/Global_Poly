@@ -1,5 +1,5 @@
 dofile("data/scripts/lib/mod_settings.lua")
-dofile_once("mods/global_poly/files/scripts/poly_pool.lua")
+--dofile_once("mods/global_poly/files/scripts/poly_pool.lua")
 
 ---@diagnostic disable-next-line: lowercase-global
 function mod_setting_change_callback(mod_id, gui, in_main_menu, setting, old_value, new_value)
@@ -13,6 +13,7 @@ local poly_list_desc = "Click to enable & disable creatures you can chaotic poly
 local poly_enable_all_name = "[Enable All]"
 local poly_disable_all_name = "[Disable All]"
 local poly_vanilla_all_name = "[Reset to Default]"
+local poly_random_all_name = "[Randomise Pool]"
 
 local monsterpath = "data/entities/animals/"
 
@@ -174,6 +175,26 @@ if GameIsBetaBuild() then
             end
         },
         {
+            id = "poly_random_all",
+            ui_name = "",
+            ui_fn = function(mod_id, gui, in_main_menu, im_id, setting)
+                if not in_main_menu then
+                    GuiColorSetForNextWidget(gui, 0.9, 0.9, 0.9, 0.8)
+                    local lmb = GuiButton(gui, im_id, mod_setting_group_x_offset, 0, poly_random_all_name)
+                    if lmb then
+                        for k=1,#poly_control_options
+                        do local enemy = poly_control_options[k]
+                            if math.random(1,3) == 1 then
+                                EditPolyTable(true, enemy.file, enemy.uniquepath or false)
+                            else
+                                EditPolyTable(false, enemy.file, enemy.uniquepath or false)
+                            end
+                        end
+                    end
+                end
+            end
+        },
+        {
             category_id = "poly_toggler",
             ui_name = poly_list_name,
             ui_description = poly_list_desc,
@@ -201,6 +222,7 @@ if GameIsBetaBuild() then
                     ui_name = "",
                     ui_fn = function(mod_id, gui, in_main_menu, im_id, setting)
                         if not in_main_menu then
+                            dofile_once("mods/global_poly/files/scripts/poly_pool.lua")
                             PolyControlSetup(in_main_menu,poly_control_options,vanilla_poly_pool)
                             GuiIdPushString(gui, "global_poly_menu")
                             GuiLayoutBeginHorizontal(gui, 0, 0, false, 6, 6)
