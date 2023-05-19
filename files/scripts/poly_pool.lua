@@ -681,12 +681,12 @@ poly_control_options = {
     },
     {
         file="gate_monster_c",
-        name="Sieve (Triangle Boss)",
+        name="Goalkeeper (Triangle Boss)",
         uniquepath="data/entities/animals/boss_gate/",
     },
     {
         file="gate_monster_d",
-        name="Goalkeeper (Triangle Boss)",
+        name="Sieve (Triangle Boss)",
         uniquepath="data/entities/animals/boss_gate/",
     },
     {
@@ -731,9 +731,11 @@ poly_control_options = {
 
 --Note for other modders
 --If you want to add your own creatures in here, just append to the vanilla_creatures table and it'll handle the rest.
---I added some of the creatures from existing creature mods at the time, but unfortunately don't feel I've been able to capture them all
---Or, at least won't be able to capture them all 10 years into the future
---If you're a futuristic AI modder, just append here and it'll be good to go!
+--
+--Append all modded creatures to the poly_control_options table
+--Append all creatures you want to be polymorphed into by default in the vanilla_poly_pool table
+--
+--Check the steam workshop discussions page for more information
 --
 --[Conga]
 

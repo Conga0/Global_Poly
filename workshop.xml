@@ -1,7 +1,7 @@
 	<Mod
-		name="Conga's Cats"
+		name="Poly Control"
 		description=""
-		tags="creatures,gameplay,funny,audio"
+		tags="creatures,gameplay"
 		dont_upload_folders="FOLDER_TO_IGNORE1|FOLDER_TO_IGNORE2"
 		dont_upload_files="FILE_TO_IGNORE1|FILE_TO_IGNORE2"
 	> 

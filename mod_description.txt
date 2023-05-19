@@ -1,19 +1,15 @@
-Implements cute Cats at the start of each run.
-Might rarely be found around the world.
-Nothing more, nothing less.
+A noita mod which lets you control the chaotic polymorph pool and let you transform into anything!.
+Wanted to turn into a boss?
+A lukki?
+Some weird gremlin?
+Kolmisilma himself?!
 
-They are non-hostile beings which make cute sounds
+Now you can with Poly Control!
+Check mod settings ingame to configure your chaotic polymorph pool.
 
-Recommended to be placed above More Creeps & Weirdos in the mod list.
-
-
-Credit:
-Spoopy - Created the fluffy cat sprites
-Hinoguchi Sorako - Voiced the cats
-
-
-
-Contains configurable settings.
+Note: Currently only works on the beta branch of Noita
+Note: As this only works on the beta branch, which is prone to sudden changes, this mod may break.
+If it does, please leave a comment and I'll fix it as soon as possible.
 
 If you wish to support my work in a tangiable manner, you can donate here:
 https://ko-fi.com/congalyne

@@ -1,4 +1,5 @@
 dofile("data/scripts/lib/mod_settings.lua")
+dofile_once("mods/global_poly/files/scripts/poly_pool.lua")
 
 ---@diagnostic disable-next-line: lowercase-global
 function mod_setting_change_callback(mod_id, gui, in_main_menu, setting, old_value, new_value)
@@ -8,7 +9,7 @@ end
 local currentLang = GameTextGetTranslatedOrNot("$current_language")
 -- Could be handled with a table indexed by key/language: translations[currentLang].poly_list_name or translations["poly_list_name"][currentLang] or something /shrug -copi
 local poly_list_name = "Polymorph List"
-local poly_list_desc = "Click to enable & disable creatures you can chaotic polymorph into \nLeft click to enable, Right click to disable \n \nYou need at least 2 creatures enabled for the mod to work properly."
+local poly_list_desc = "Click to enable & disable creatures you can chaotic polymorph into \nLeft click to enable, Right click to disable"
 local poly_enable_all_name = "[Enable All]"
 local poly_disable_all_name = "[Disable All]"
 local poly_vanilla_all_name = "[Reset to Default]"
@@ -25,28 +26,75 @@ function EditPolyTable(mode,filename,specialpath)
   --Creates a valid filepath with various bits of data
   local newfilepath = table.concat({filepath,filename,".xml"})
 
-  --[[
-  ]]--
-  local polytable = PolymorphTableGet(false)
-  for k=1,#polytable
-  do local v = polytable[k]
-    print("Polymorph table is " .. tostring(v))
-  end
-
   if mode == true then
     PolymorphTableAddEntity(newfilepath, false, true)
-    print(table.concat({"ADDED: ",newfilepath}))
+    ModSettingSetNextValue("global_poly.poly_toggle_" .. filename, true, false)
     if #PolymorphTableGet(false) < 3 then
       PolymorphTableRemoveEntity("data/entities/animals/poly_control_filler/sheep.xml", true, true)
-      print("Removing emergency sheep, good work out there soldier!")
     end
   else
     if #PolymorphTableGet(false) < 2 then
       PolymorphTableAddEntity("data/entities/animals/poly_control_filler/sheep.xml", false, true)
-      print("Adding emergency sheep as poly storage to prevent table reset!!")
     end
     PolymorphTableRemoveEntity(newfilepath, true, true)
-    print(table.concat({"REMOVED: ",newfilepath}))
+    ModSettingSetNextValue("global_poly.poly_toggle_" .. filename, false, false)
+  end
+end
+
+if DebugGetIsDevBuild() then --If mod is loaded using debug build, then print using debug data
+  function EditPolyTable(mode,filename,specialpath)
+    local filepath = "data/entities/animals/"
+    if specialpath then
+      filepath = specialpath
+    end
+  
+    --Creates a valid filepath with various bits of data
+    local newfilepath = table.concat({filepath,filename,".xml"})
+  
+    --[[
+    ]]--
+    local polytable = PolymorphTableGet(false)
+    for k=1,#polytable
+    do local v = polytable[k]
+      print("Polymorph table is " .. tostring(v))
+    end
+  
+    if mode == true then
+      PolymorphTableAddEntity(newfilepath, false, true)
+      ModSettingSetNextValue("global_poly.poly_toggle_" .. filename, true, false)
+      print(table.concat({"ADDED: ",newfilepath}))
+      if #PolymorphTableGet(false) < 3 then
+        PolymorphTableRemoveEntity("data/entities/animals/poly_control_filler/sheep.xml", true, true)
+        print("Removing emergency sheep, good work out there soldier!")
+      end
+    else
+      if #PolymorphTableGet(false) < 2 then
+        PolymorphTableAddEntity("data/entities/animals/poly_control_filler/sheep.xml", false, true)
+        print("Adding emergency sheep as poly storage to prevent table reset!!")
+      end
+      PolymorphTableRemoveEntity(newfilepath, true, true)
+      ModSettingSetNextValue("global_poly.poly_toggle_" .. filename, false, false)
+      print(table.concat({"REMOVED: ",newfilepath}))
+    end
+  end
+end
+
+function ResetPolyTable(poly_table_disable,poly_table_enable)
+  for k=1,#poly_table_disable
+  do local enemy = poly_table_disable[k]
+    EditPolyTable(false, enemy.file, enemy.uniquepath or false)
+  end
+
+  for k=1,#poly_table_enable
+  do local enemy = poly_table_enable[k]
+    EditPolyTable(true, enemy, false)
+  end
+end
+
+function PolyControlSetup(main_menu_check,poly_1,poly_2)
+  if HasFlagPersistent( "poly_control_firsttime_setup" ) == false and not main_menu_check then
+    ResetPolyTable(poly_control_options,vanilla_poly_pool)
+    AddFlagPersistent( "poly_control_firsttime_setup" )
   end
 end
 
@@ -87,7 +135,6 @@ if GameIsBetaBuild() then
                         for k = 1, #poly_control_options
                         do
                             local enemy = poly_control_options[k]
-                            ModSettingSetNextValue("global_poly.poly_toggle_" .. enemy.file, true, false)
                             --PolymorphTableAddEntity((enemy.uniquepath or monsterpath) .. enemy.file .. ".xml", false, true)
                             EditPolyTable(true, enemy.file, enemy.uniquepath or false)
                         end
@@ -106,7 +153,6 @@ if GameIsBetaBuild() then
                         for k = 1, #poly_control_options
                         do
                             local enemy = poly_control_options[k]
-                            ModSettingSetNextValue("global_poly.poly_toggle_" .. enemy.file, false, false)
                             --PolymorphTableRemoveEntity((enemy.uniquepath or monsterpath) .. enemy.file .. ".xml", true, true)
                             EditPolyTable(false, enemy.file, enemy.uniquepath or false)
                         end
@@ -122,23 +168,7 @@ if GameIsBetaBuild() then
                     GuiColorSetForNextWidget(gui, 0.9, 0.9, 0.9, 0.8)
                     local lmb = GuiButton(gui, im_id, mod_setting_group_x_offset, 0, poly_vanilla_all_name)
                     if lmb then
-                        for k = 1, #poly_control_options
-                        do
-                            local enemy = poly_control_options[k]
-                            ModSettingSetNextValue("global_poly.poly_toggle_" .. enemy.file, false, false)
-                            PolymorphTableRemoveEntity((enemy.uniquepath or monsterpath) .. enemy.file .. ".xml", true,
-                                true)
-                            EditPolyTable(false, enemy.file, enemy.uniquepath or false)
-                        end
-
-                        for k = 1, #vanilla_poly_pool
-                        do
-                            local enemy = vanilla_poly_pool[k]
-                            ModSettingSetNextValue("global_poly.poly_toggle_" .. enemy, true, false)
-                            PolymorphTableAddEntity(monsterpath .. enemy .. ".xml", false, true)
-                            ---@diagnostic disable-next-line: undefined-field
-                            EditPolyTable(false, enemy, enemy.uniquepath or false)
-                        end
+                        ResetPolyTable(poly_control_options,vanilla_poly_pool)
                     end
                 end
             end
@@ -171,8 +201,8 @@ if GameIsBetaBuild() then
                     ui_name = "",
                     ui_fn = function(mod_id, gui, in_main_menu, im_id, setting)
                         if not in_main_menu then
+                            PolyControlSetup(in_main_menu,poly_control_options,vanilla_poly_pool)
                             GuiIdPushString(gui, "global_poly_menu")
-                            dofile_once("mods/global_poly/files/scripts/poly_pool.lua")
                             GuiLayoutBeginHorizontal(gui, 0, 0, false, 6, 6)
                             local count = 0
                             for i=1, #poly_control_options do
@@ -196,7 +226,11 @@ if GameIsBetaBuild() then
                                         ModSettingSetNextValue(setting_id, true, false)
                                         --Conga: I know you want it to toggle here and reset on default down there, but I feel like this system works better honestly
                                         --Less user-error risk for accidental double-clicks and more intuitive overall
-                                        --"why does right click randomly disable some stuff but enable others?!?!?!?! Your mod is broken! pls fix!!!" - Quote from user titled 'readn't mc noreaderson'
+                                        --"why does right click randomly disable some stuff but enable others?!?!?!?! Your mod is broken! pls fix!!!" - Quote from user titled 'readn't mc noreaderson' who didn't read how to use the mod
+                                        --
+                                        --Also, it seems the vanilla reset function was broken, should be fixed now by exploiting the table reset
+                                        --However, if the poly table functionality is changed as requested in the google doc, I'll have to rewrite the function..
+                                        --What it did though, was empty the entire polymorph table, then add every creature normally in the vanilla poly table to the table manually
                                         --
                                         --ModSettingSetNextValue(setting_id, not old_value, false)
                                         EditPolyTable(true, enemy.file, enemy.uniquepath or false)
