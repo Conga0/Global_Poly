@@ -16,33 +16,38 @@ local poly_vanilla_all_name = "[Reset to Default]"
 local monsterpath = "data/entities/animals/"
 
 --If mode is true then add to table, otherwise we are removing
-function EditPolyTable(mode, filename, specialpath)
-    local filepath = "data/entities/animals/"
-    if specialpath then
-        filepath = specialpath
-    end
+function EditPolyTable(mode,filename,specialpath)
+  local filepath = "data/entities/animals/"
+  if specialpath then
+    filepath = specialpath
+  end
 
-    --Creates a valid filepath with various bits of data
-    filepath = table.concat({ filepath, filename, ".xml" })
-    --GamePrint(filepath)
-    --[[
-    ]]
-     --
-    local polytable = PolymorphTableGet(false)
-    for k = 1, #polytable
-    do
-        local v = polytable[k]
-        GamePrint("Polymorph table is " .. tostring(v))
-    end
+  --Creates a valid filepath with various bits of data
+  local newfilepath = table.concat({filepath,filename,".xml"})
 
-    if mode == true then
-        PolymorphTableAddEntity(filepath, false, true)
-        --GamePrint("Added")
-    else
-        PolymorphTableRemoveEntity(filepath, true, true)
-        GamePrint(filepath)
-        GamePrint("Removed")
+  --[[
+  ]]--
+  local polytable = PolymorphTableGet(false)
+  for k=1,#polytable
+  do local v = polytable[k]
+    print("Polymorph table is " .. tostring(v))
+  end
+
+  if mode == true then
+    PolymorphTableAddEntity(newfilepath, false, true)
+    print(table.concat({"ADDED: ",newfilepath}))
+    if #PolymorphTableGet(false) < 3 then
+      PolymorphTableRemoveEntity("data/entities/animals/poly_control_filler/sheep.xml", true, true)
+      print("Removing emergency sheep, good work out there soldier!")
     end
+  else
+    if #PolymorphTableGet(false) < 2 then
+      PolymorphTableAddEntity("data/entities/animals/poly_control_filler/sheep.xml", false, true)
+      print("Adding emergency sheep as poly storage to prevent table reset!!")
+    end
+    PolymorphTableRemoveEntity(newfilepath, true, true)
+    print(table.concat({"REMOVED: ",newfilepath}))
+  end
 end
 
 local mod_id = "global_poly"
@@ -188,7 +193,12 @@ if GameIsBetaBuild() then
                                     GuiTooltip(gui, enemy.name, "")
                                     if lmb then
                                         GamePlaySound("data/audio/Desktop/ui.bank", "ui/button_click", GameGetCameraPos())
-                                        ModSettingSetNextValue(setting_id, not old_value, false)
+                                        ModSettingSetNextValue(setting_id, true, false)
+                                        --Conga: I know you want it to toggle here and reset on default down there, but I feel like this system works better honestly
+                                        --Less user-error risk for accidental double-clicks and more intuitive overall
+                                        --"why does right click randomly disable some stuff but enable others?!?!?!?! Your mod is broken! pls fix!!!" - Quote from user titled 'readn't mc noreaderson'
+                                        --
+                                        --ModSettingSetNextValue(setting_id, not old_value, false)
                                         EditPolyTable(true, enemy.file, enemy.uniquepath or false)
                                     end
                                     if rmb then

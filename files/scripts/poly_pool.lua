@@ -600,6 +600,7 @@ poly_control_options = {
     {
         file="dark_alchemist",
         name="Dark Alchemist",
+        uniquepath="data/entities/animals/illusions/",
     },
     {
         file="necromancer_shop",
@@ -666,6 +667,7 @@ poly_control_options = {
     {
         file="minipit",
         name="Tiny Minion",
+        uniquepath="data/entities/animals/special/",
     },
     {
         file="gate_monster_a",
@@ -717,7 +719,7 @@ poly_control_options = {
     },
     {
         file="fireskull_weak",
-        name="Non-Toxic Slime",
+        name="Fire Skull (Mines)",
         uniquegfx="poly_control/fireskull_weak",
     },
     {
