@@ -1,3 +1,4 @@
+---@diagnostic disable
 local ffi = nil
 if require then
     pcall(function()
