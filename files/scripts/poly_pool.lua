@@ -300,22 +300,27 @@ poly_control_options = {
     {
         file="lukki_tiny",
         name="Small Spider (Lukki)",
+        uniquepath="data/entities/animals/lukki/",
     },
     {
         file="lukki",
         name="Spider (Lukki)",
+        uniquepath="data/entities/animals/lukki/",
     },
     {
         file="lukki_longleg",
         name="Giant Spider (Lukki)",
+        uniquepath="data/entities/animals/lukki/",
     },
     {
         file="lukki_creepy_long",
         name="Creepy Spider (Lukki)",
+        uniquepath="data/entities/animals/lukki/",
     },
     {
         file="lukki_dark",
         name="Toothy Spider (Lukki)",
+        uniquepath="data/entities/animals/lukki/",
     },
     {
         file="worm_tiny",
@@ -537,10 +542,10 @@ poly_control_options = {
         file="hpcrystal",
         name="Recovery Crystal",
     },
-    {
-        file="ghost",
-        name="Ghost",
-    },
+    --{ --Non-Functional, player instantly dies on polymorph because it doesn't have a home crystal
+    --    file="ghost",
+    --    name="Ghost",
+    --},
     {
         file="wand_ghost",
         name="Wand Ghost",

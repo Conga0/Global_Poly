@@ -35,4 +35,9 @@ function OnWorldInitialized()
             EditPolyTable(false, enemy.file, enemy.uniquepath or false)
         end
     end
+
+    --Hack to fix sheep being inserted for some reason???
+    if #PolymorphTableGet(false) > 1 then
+        PolymorphTableRemoveEntity("data/entities/animals/poly_control_filler/sheep.xml", true, true)
+    end
 end

@@ -42,7 +42,7 @@ function EditPolyTable(mode,filename,specialpath)
   end
 end
 
-if DebugGetIsDevBuild() then --If mod is loaded using debug build, then print using debug data
+if DebugGetIsDevBuild() and 1 == 2 then --If mod is loaded using debug build, then print using debug data  |  can change 1 == 2 to 1 == 1 to enable
   function EditPolyTable(mode,filename,specialpath)
     local filepath = "data/entities/animals/"
     if specialpath then
@@ -250,9 +250,9 @@ if GameIsBetaBuild() then
                                         --Less user-error risk for accidental double-clicks and more intuitive overall
                                         --"why does right click randomly disable some stuff but enable others?!?!?!?! Your mod is broken! pls fix!!!" - Quote from user titled 'readn't mc noreaderson' who didn't read how to use the mod
                                         --
-                                        --Also, it seems the vanilla reset function was broken, should be fixed now by exploiting the table reset
-                                        --However, if the poly table functionality is changed as requested in the google doc, I'll have to rewrite the function..
-                                        --What it did though, was empty the entire polymorph table, then add every creature normally in the vanilla poly table to the table manually
+                                        --Check ResetPolyTable function for how poly table reset works
+                                        --Essentially, it removes everything from the poly list
+                                        --Then it re-adds everything from the vanilla_poly_pool list
                                         --
                                         --ModSettingSetNextValue(setting_id, not old_value, false)
                                         EditPolyTable(true, enemy.file, enemy.uniquepath or false)

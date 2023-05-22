@@ -51,11 +51,11 @@
 			attack_ranged_action_frame="3"
 			attack_melee_action_frame="3"
 			sense_creatures="1"
-			attack_ranged_enabled="1"
+			attack_ranged_enabled="0"
 			attack_melee_enabled="0"
 			can_fly="1"  
 			needs_food="0"
-			attack_ranged_entity_file="data/entities/projectiles/laser_bouncy.xml"
+			attack_ranged_entity_file=""
 			attack_ranged_frames_between="80" 
 			eye_offset_y="-5"
 			attack_ranged_offset_y="-5"
@@ -142,6 +142,10 @@
 			>
 		</SpriteStainsComponent>
 	</Base>
+  
+ 	<VariableStorageComponent
+		_tags="no_gold_drop">
+	</VariableStorageComponent>
 
 </Entity>
 
