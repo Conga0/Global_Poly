@@ -738,6 +738,14 @@ poly_control_options = {
         uniquepath="data/entities/animals/poly_control_filler/",
         uniquegfx="poly_control/temple_statue",
     },
+    {
+        file="shotgunner_hell",
+        name="Devil Shotgunner",
+    },
+    {
+        file="sniper_hell",
+        name="Devil Sniper",
+    },
 }
 
 --Note for other modders
@@ -868,7 +876,7 @@ vanilla_poly_pool = {
     "wraith_storm",
     "wraith_glowing",
     "statue",
-    "ethereal_being",
+    --"ethereal_being",
     "phantom_a",
     "phantom_b",
     "necromancer",
